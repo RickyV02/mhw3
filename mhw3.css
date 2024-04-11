@@ -1117,6 +1117,7 @@ footer {
 .footer-nav {
   font-weight: 400;
   margin-bottom: 0.8rem;
+  overflow-x: hidden;
   width: 100%;
   display: flex;
   align-items: flex-start;
@@ -1128,6 +1129,7 @@ footer {
   color: #9ab;
   font-size: 0.9rem;
   font-weight: bold;
+  width: auto;
 }
 
 #show_more {
