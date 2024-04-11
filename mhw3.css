@@ -1067,11 +1067,10 @@ h1 {
 
 .sectionews {
   display: flex;
-  overflow-x: scroll;
+  overflow: scroll;
   scrollbar-width: none;
   height: 260px;
   width: 100%;
-  flex-direction: row;
   justify-content: space-between;
   gap: 1%;
   margin-top: 1.5rem;
@@ -1436,10 +1435,11 @@ footer {
 
   .collezione {
     width: 100%;
-    gap: 10px;
+    gap: 5px;
   }
 
   .ac {
+    width: 80%;
     height: 162px;
   }
 
@@ -1485,12 +1485,6 @@ footer {
   .recentshowdowns {
     margin-top: 3%;
     width: 85%;
-    height: 760px;
-  }
-
-  .sectionews {
-    width: 100%;
-    flex-direction: column;
   }
 
   .newsblock p {
@@ -1508,7 +1502,7 @@ footer {
   }
 
   .footer-wrapper {
-    width: 80%;
+    width: 72%;
   }
 
   .footer-nav {
