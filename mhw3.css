@@ -1152,6 +1152,16 @@ footer {
   letter-spacing: 0;
 }
 
+@media (max-width: 770px) {
+  .reviews {
+    flex-direction: column;
+    align-items: center;
+  }
+  .colonna2 {
+    width: 60%;
+  }
+}
+
 @media (max-width: 600px) {
   .nascondi_mobile {
     display: none;
