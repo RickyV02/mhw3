@@ -75,6 +75,8 @@ nav input[type="text"] {
   margin-left: 2%;
   height: 20px;
   color: rgb(28, 27, 27);
+  font-size: 14px;
+  font-weight: bold;
   background-color: #445566;
 }
 
