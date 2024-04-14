@@ -5,6 +5,14 @@ const overviews = document.querySelectorAll(".ac img");
 const accountitem = document.querySelectorAll(".crea-account");
 const modal_view = document.querySelector("#modal_account");
 const newsitem = document.querySelectorAll("#show_more");
+const form = document.querySelector("form");
+const client_id =
+  "16b62a7b4155d88c6166fa60765246398123f4f72436d850d9488a275bea93a4";
+const client_secret =
+  "bd5ff1d692ce2844ed900d3ad4f8040e135cac2af66d347d1ca8aba960ecbfae";
+const api_key = "829cd1922e1d8362f105565dd2becd0d";
+const access_token =
+  "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4MjljZDE5MjJlMWQ4MzYyZjEwNTU2NWRkMmJlY2QwZCIsInN1YiI6IjY2MWMwNGNhZDdjZDA2MDE2M2EyYTdmYSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.EGRKuB_NzA5DMADbcqj6fcdwSeg-QvimDfzSsaL4rG8";
 
 function login(event) {
   event.preventDefault();
@@ -83,6 +91,33 @@ function showmore(event) {
   item.classList.add("nocursor");
 }
 
+function onJson(json) {
+  if (!json) return;
+  else {
+  }
+}
+
+function onResponse(response) {
+  if (!response.ok) {
+    console.log("Error: " + response);
+    return null;
+  } else return response.json();
+}
+
+function search(event) {
+  event.preventDefault();
+  const movie_input = document.querySelector("#movie_name");
+  const movie_name = encodeURIComponent(movie_input.value);
+
+  fetch("https://api.themoviedb.org/3/search/movie?query=" + movie_name, {
+    headers: {
+      Authorization: "Bearer " + access_token,
+    },
+  })
+    .then(onResponse)
+    .then(onJson);
+}
+
 loginitem.addEventListener("click", login);
 
 for (const rev of boxadreviews) {
@@ -106,3 +141,5 @@ for (const crosses of cross_img) {
 for (const news of newsitem) {
   news.addEventListener("click", showmore);
 }
+
+form.addEventListener("submit", search);
