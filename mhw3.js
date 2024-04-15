@@ -87,7 +87,8 @@ function close_modal() {
   modal_view.classList.add("nascosto");
 }
 
-function close_search() {
+function close_search(event) {
+  event.stopPropagation();
   document.body.classList.remove("noscroll");
   modal_search.classList.remove("modal_display");
   modal_search.classList.add("nascosto");
@@ -100,6 +101,8 @@ function showmore(event) {
   item.classList.add("nocursor");
 }
 
+function show_info() {}
+
 function onJson(json) {
   if (!json) return;
   else {
@@ -107,8 +110,8 @@ function onJson(json) {
     modal_search.classList.remove("nascosto");
     modal_search.innerHTML = "";
     document.body.classList.add("noscroll");
-    const lista_film = json.d;
     modal_search.classList.add("modal_display");
+    const lista_film = json.d;
     for (item of lista_film) {
       const nome = item.l;
       const poster = item.i.imageUrl;
@@ -119,6 +122,7 @@ function onJson(json) {
       title.textContent = nome;
       movie_list.appendChild(title);
       movie_list.appendChild(poster_url);
+      movie_list.addEventListener("click", show_info);
       modal_search.appendChild(movie_list);
     }
   }
@@ -171,5 +175,5 @@ for (const news of newsitem) {
   news.addEventListener("click", showmore);
 }
 
-modal_search.addEventListener("click", close_search);
+modal_search.addEventListener("click", close_search, { capture: true });
 form.addEventListener("submit", search);
