@@ -4,6 +4,7 @@ const boxadreviews = document.querySelectorAll(".boxad a");
 const overviews = document.querySelectorAll(".ac img");
 const accountitem = document.querySelectorAll(".crea-account");
 const modal_view = document.querySelector("#modal_account");
+const modal_search = document.querySelector("#modal_search");
 const newsitem = document.querySelectorAll("#show_more");
 const form = document.querySelector("form");
 const client_id =
@@ -81,12 +82,15 @@ function crea_account(event) {
   modal_view.scrollIntoView();
 }
 
-function close_modal(event) {
+function close_modal() {
   document.body.classList.remove("noscroll");
   modal_view.classList.add("nascosto");
-  modal_view.classList.remove("modal_display");
-  const div = document.querySelector(".modal_div");
-  div.classList.add("nascosto");
+}
+
+function close_search() {
+  document.body.classList.remove("noscroll");
+  modal_search.classList.remove("modal_display");
+  modal_search.classList.add("nascosto");
 }
 
 function showmore(event) {
@@ -100,26 +104,23 @@ function onJson(json) {
   if (!json) return;
   else {
     console.log(json);
-    modal_view.classList.remove("nascosto");
-    modal_view.classList.add("modal_display");
+    modal_search.classList.remove("nascosto");
+    modal_search.innerHTML = "";
     document.body.classList.add("noscroll");
-    modal_view.innerHTML = "";
     const lista_film = json.d;
-    if (d.lenght === 1) {
-      fetch;
-    } else
-      for (item of lista_film) {
-        const nome = item.l;
-        const poster = item.i.imageUrl;
-        const movie_list = document.createElement("li");
-        const poster_url = document.createElement("img");
-        poster_url.src = poster;
-        const title = document.createElement("h2");
-        title.textContent = nome;
-        movie_list.appendChild(title);
-        movie_list.appendChild(poster_url);
-        modal_view.appendChild(movie_list);
-      }
+    modal_search.classList.add("modal_display");
+    for (item of lista_film) {
+      const nome = item.l;
+      const poster = item.i.imageUrl;
+      const movie_list = document.createElement("li");
+      const poster_url = document.createElement("img");
+      poster_url.src = poster;
+      const title = document.createElement("h2");
+      title.textContent = nome;
+      movie_list.appendChild(title);
+      movie_list.appendChild(poster_url);
+      modal_search.appendChild(movie_list);
+    }
   }
 }
 
@@ -170,5 +171,5 @@ for (const news of newsitem) {
   news.addEventListener("click", showmore);
 }
 
-modal_view.addEventListener("click", close_modal);
+modal_search.addEventListener("click", close_search);
 form.addEventListener("submit", search);
