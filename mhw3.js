@@ -84,7 +84,8 @@ function crea_account(event) {
 function close_modal(event) {
   document.body.classList.remove("noscroll");
   modal_view.classList.add("nascosto");
-  const div = document.querySelector(".modal div");
+  modal_view.classList.remove("modal_display");
+  const div = document.querySelector(".modal_div");
   div.classList.add("nascosto");
 }
 
@@ -102,7 +103,6 @@ function onJson(json) {
     modal_view.classList.remove("nascosto");
     modal_view.classList.add("modal_display");
     document.body.classList.add("noscroll");
-    modal_view.addEventListener("click", close_modal);
     modal_view.innerHTML = "";
     const lista_film = json.d;
     if (d.lenght === 1) {
@@ -170,4 +170,5 @@ for (const news of newsitem) {
   news.addEventListener("click", showmore);
 }
 
+modal_view.addEventListener("click", close_modal);
 form.addEventListener("submit", search);
