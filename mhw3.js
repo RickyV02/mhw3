@@ -10,7 +10,7 @@ const client_id =
   "16b62a7b4155d88c6166fa60765246398123f4f72436d850d9488a275bea93a4";
 const client_secret =
   "bd5ff1d692ce2844ed900d3ad4f8040e135cac2af66d347d1ca8aba960ecbfae";
-const api_key = "829cd1922e1d8362f105565dd2becd0d";
+const api_key = "e9fed50942msh83110b0212f82bfp1a1848jsnee772af8e5e0";
 const access_token =
   "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4MjljZDE5MjJlMWQ4MzYyZjEwNTU2NWRkMmJlY2QwZCIsInN1YiI6IjY2MWMwNGNhZDdjZDA2MDE2M2EyYTdmYSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.EGRKuB_NzA5DMADbcqj6fcdwSeg-QvimDfzSsaL4rG8";
 
@@ -74,14 +74,18 @@ function changeoverviews(event) {
 
 function crea_account(event) {
   event.preventDefault();
-  modal_view.classList.remove("nascosto");
-  modal_view.scrollIntoView();
   document.body.classList.add("noscroll");
+  modal_view.classList.remove("nascosto");
+  const div = document.querySelector(".modal div");
+  div.classList.remove("nascosto");
+  modal_view.scrollIntoView();
 }
 
 function close_modal() {
   document.body.classList.remove("noscroll");
   modal_view.classList.add("nascosto");
+  const div = document.querySelector(".modal div");
+  div.classList.add("nascosto");
 }
 
 function showmore(event) {
@@ -94,6 +98,25 @@ function showmore(event) {
 function onJson(json) {
   if (!json) return;
   else {
+    console.log(json);
+    modal_view.classList.remove("nascosto");
+    modal_view.classList.add("modal_display");
+    document.body.classList.add("noscroll");
+    modal_view.addEventListener("click", close_modal);
+    modal_view.innerHTML = "";
+    const lista_film = json.d;
+    for (item of lista_film) {
+      const nome = item.l;
+      const poster = item.i.imageUrl;
+      const movie_list = document.createElement("li");
+      const poster_url = document.createElement("img");
+      poster_url.src = poster;
+      const title = document.createElement("h2");
+      title.textContent = nome;
+      movie_list.appendChild(title);
+      movie_list.appendChild(poster_url);
+      modal_view.appendChild(movie_list);
+    }
   }
 }
 
@@ -109,13 +132,15 @@ function search(event) {
   const movie_input = document.querySelector("#movie_name");
   const movie_name = encodeURIComponent(movie_input.value);
 
-  fetch("https://api.themoviedb.org/3/search/movie?query=" + movie_name, {
+  const url = "https://imdb8.p.rapidapi.com/auto-complete?q=" + movie_name;
+  const options = {
+    method: "GET",
     headers: {
-      Authorization: "Bearer " + access_token,
+      "X-RapidAPI-Key": api_key,
+      "X-RapidAPI-Host": "imdb8.p.rapidapi.com",
     },
-  })
-    .then(onResponse)
-    .then(onJson);
+  };
+  fetch(url, options).then(onResponse).then(onJson);
 }
 
 loginitem.addEventListener("click", login);

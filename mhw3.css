@@ -202,6 +202,37 @@ nav input[type="text"] {
   display: none;
 }
 
+.modal_display {
+  position: fixed;
+  height: auto;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+#modal_account li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  list-style: none;
+  margin: 10px;
+  padding: 15px;
+  border-radius: 12px;
+  text-align: center;
+  background: #272727;
+}
+
+#modal_account img {
+  max-width: 150px;
+}
+
+#modal_account h2 {
+  color: #445566;
+  font-size: 1.5em;
+  padding: 15px 10px 0;
+  margin-top: auto;
+}
+
 .modal_div {
   background-color: #445566;
   display: flex;
