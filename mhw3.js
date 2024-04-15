@@ -88,7 +88,6 @@ function close_modal() {
 }
 
 function close_search(event) {
-  event.stopPropagation();
   document.body.classList.remove("noscroll");
   modal_search.classList.remove("modal_display");
   modal_search.classList.add("nascosto");
@@ -175,5 +174,5 @@ for (const news of newsitem) {
   news.addEventListener("click", showmore);
 }
 
-modal_search.addEventListener("click", close_search, { capture: true });
+modal_search.addEventListener("click", close_search);
 form.addEventListener("submit", search);
