@@ -93,14 +93,16 @@ function close_search(event) {
   modal_search.classList.add("nascosto");
 }
 
+function stopProp(event) {
+  event.stopPropagation();
+}
+
 function showmore(event) {
   event.preventDefault();
   const item = event.currentTarget;
   item.textContent = item.dataset.info;
   item.classList.add("nocursor");
 }
-
-function show_info() {}
 
 function onJson(json) {
   if (!json) return;
@@ -121,7 +123,7 @@ function onJson(json) {
       title.textContent = nome;
       movie_list.appendChild(title);
       movie_list.appendChild(poster_url);
-      movie_list.addEventListener("click", show_info);
+      movie_list.addEventListener("click", stopProp);
       modal_search.appendChild(movie_list);
     }
   }
