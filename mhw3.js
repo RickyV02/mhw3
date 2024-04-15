@@ -76,12 +76,12 @@ function crea_account(event) {
   event.preventDefault();
   document.body.classList.add("noscroll");
   modal_view.classList.remove("nascosto");
-  const div = document.querySelector(".modal div");
+  const div = document.querySelector(".modal_div");
   div.classList.remove("nascosto");
   modal_view.scrollIntoView();
 }
 
-function close_modal() {
+function close_modal(event) {
   document.body.classList.remove("noscroll");
   modal_view.classList.add("nascosto");
   const div = document.querySelector(".modal div");
@@ -105,18 +105,21 @@ function onJson(json) {
     modal_view.addEventListener("click", close_modal);
     modal_view.innerHTML = "";
     const lista_film = json.d;
-    for (item of lista_film) {
-      const nome = item.l;
-      const poster = item.i.imageUrl;
-      const movie_list = document.createElement("li");
-      const poster_url = document.createElement("img");
-      poster_url.src = poster;
-      const title = document.createElement("h2");
-      title.textContent = nome;
-      movie_list.appendChild(title);
-      movie_list.appendChild(poster_url);
-      modal_view.appendChild(movie_list);
-    }
+    if (d.lenght === 1) {
+      fetch;
+    } else
+      for (item of lista_film) {
+        const nome = item.l;
+        const poster = item.i.imageUrl;
+        const movie_list = document.createElement("li");
+        const poster_url = document.createElement("img");
+        poster_url.src = poster;
+        const title = document.createElement("h2");
+        title.textContent = nome;
+        movie_list.appendChild(title);
+        movie_list.appendChild(poster_url);
+        modal_view.appendChild(movie_list);
+      }
   }
 }
 
