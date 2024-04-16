@@ -113,6 +113,11 @@ function onJson(json) {
     document.body.classList.add("noscroll");
     modal_search.classList.add("modal_display");
     const lista_film = json.d;
+    if (lista_film.length === 0) {
+      const msg = document.createElement("h2");
+      msg.textContent = "NO RESULTS !";
+      modal_search.appendChild(msg);
+    }
     for (item of lista_film) {
       const nome = item.l;
       const poster = item.i.imageUrl;
