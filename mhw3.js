@@ -131,6 +131,7 @@ function onJson(json) {
       movie_list.addEventListener("click", stopProp);
       modal_search.appendChild(movie_list);
     }
+    modal_search.scrollIntoView();
   }
 }
 
@@ -183,3 +184,4 @@ for (const news of newsitem) {
 
 modal_search.addEventListener("click", close_search);
 form.addEventListener("submit", search);
+window.addEventListener("keydown", close_search);
