@@ -184,4 +184,3 @@ for (const news of newsitem) {
 
 modal_search.addEventListener("click", close_search);
 form.addEventListener("submit", search);
-window.addEventListener("keydown", close_search);
