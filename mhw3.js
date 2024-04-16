@@ -107,10 +107,9 @@ function showmore(event) {
 function onJson(json) {
   if (!json) return;
   else {
-    console.log(json);
+    document.body.classList.add("noscroll");
     modal_search.classList.remove("nascosto");
     modal_search.innerHTML = "";
-    document.body.classList.add("noscroll");
     modal_search.classList.add("modal_display");
     const lista_film = json.d;
     if (lista_film.length === 0) {
