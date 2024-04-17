@@ -177,12 +177,15 @@ nav input[type="text"] {
   border: none;
   border-radius: 5px;
   background-color: #9ab;
+  width: 85%;
 }
 
 #loginwindow p {
   color: #14181c;
   font-size: 13px;
-  margin-bottom: 2%;
+  padding: auto;
+  margin: auto;
+  margin-left: 0;
 }
 
 #loginwindow a {
@@ -198,6 +201,12 @@ nav input[type="text"] {
   height: 15px;
   width: 15px;
   cursor: pointer;
+}
+
+@media (max-width: 845px) {
+  .cross {
+    margin-left: 90%;
+  }
 }
 
 #modal_account.nascosto,
