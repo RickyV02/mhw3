@@ -7,6 +7,8 @@ const modal_view = document.querySelector("#modal_account");
 const modal_search = document.querySelector("#modal_search");
 const newsitem = document.querySelectorAll("#show_more");
 const form = document.querySelector("form");
+const placeholder_img =
+  "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/330px-No-Image-Placeholder.svg.png";
 const client_id =
   "16b62a7b4155d88c6166fa60765246398123f4f72436d850d9488a275bea93a4";
 const client_secret =
@@ -105,7 +107,7 @@ function showmore(event) {
 }
 
 function onJson(json) {
-  if (!json) return;
+  if (!json) return null;
   else {
     document.body.classList.add("noscroll");
     modal_search.classList.remove("nascosto");
@@ -118,8 +120,13 @@ function onJson(json) {
       modal_search.appendChild(msg);
     }
     for (item of lista_film) {
+      let poster;
+      if (!item.i) {
+        poster = placeholder_img;
+      } else {
+        poster = item.i.imageUrl;
+      }
       const nome = item.l;
-      const poster = item.i.imageUrl;
       const movie_list = document.createElement("li");
       const poster_url = document.createElement("img");
       poster_url.src = poster;
