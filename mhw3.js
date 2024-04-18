@@ -9,13 +9,9 @@ const newsitem = document.querySelectorAll("#show_more");
 const form = document.querySelector("form");
 const placeholder_img =
   "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/330px-No-Image-Placeholder.svg.png";
-const client_id =
-  "16b62a7b4155d88c6166fa60765246398123f4f72436d850d9488a275bea93a4";
-const client_secret =
-  "bd5ff1d692ce2844ed900d3ad4f8040e135cac2af66d347d1ca8aba960ecbfae";
 const api_key = "e9fed50942msh83110b0212f82bfp1a1848jsnee772af8e5e0";
-const access_token =
-  "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI4MjljZDE5MjJlMWQ4MzYyZjEwNTU2NWRkMmJlY2QwZCIsInN1YiI6IjY2MWMwNGNhZDdjZDA2MDE2M2EyYTdmYSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.EGRKuB_NzA5DMADbcqj6fcdwSeg-QvimDfzSsaL4rG8";
+const client_id_twitch = "12h3bsf6as2gx17rhtrnjjx0bfkr03";
+const client_secret_twitch = "cdpi68gukavd5evpooq9pn3bk31ugg";
 
 function login(event) {
   event.preventDefault();
@@ -106,7 +102,59 @@ function showmore(event) {
   item.classList.add("nocursor");
 }
 
-function onJson(json) {
+///////////////////////////////////////////////////////////////////////////////////////
+
+let token;
+let game_name;
+let song_name;
+let movie_name;
+
+function onResponse(response) {
+  if (!response.ok) {
+    console.log("Error: " + response);
+    return null;
+  } else return response.json();
+}
+
+function onTokenJson(json) {
+  token = json.access_token;
+}
+
+function show_movie_info() {}
+
+function show_music_info() {
+  console.log("prova musica");
+}
+
+function show_game(json) {
+  console.log(json);
+}
+
+function show_game_info() {
+  const url_token =
+    "https://id.twitch.tv/oauth2/token?client_id=" +
+    client_id_twitch +
+    "&client_secret=" +
+    client_secret_twitch +
+    "&grant_type=client_credentials";
+  const options_token = { method: "POST" };
+  fetch(url_token, options_token).then(onResponse).then(onTokenJson);
+  const cors_proxy = "https://corsproxy.io/?";
+  const target_url = "https://api.igdb.com/v4/games";
+  fetch(cors_proxy + target_url, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Client-ID": client_id_twitch,
+      Authorization: "Bearer " + token,
+    },
+    body: "fields age_ratings,aggregated_rating,aggregated_rating_count,alternative_names,artworks,bundles,category,checksum,collection,collections,cover,created_at,dlcs,expanded_games,expansions,external_games,first_release_date,follows,forks,franchise,franchises,game_engines,game_localizations,game_modes,genres,hypes,involved_companies,keywords,language_supports,multiplayer_modes,name,parent_game,platforms,player_perspectives,ports,rating,rating_count,release_dates,remakes,remasters,screenshots,similar_games,slug,standalone_expansions,status,storyline,summary,tags,themes,total_rating,total_rating_count,updated_at,url,version_parent,version_title,videos,websites;",
+  })
+    .then(onResponse)
+    .then(show_game);
+}
+
+function onJson_Imdb(json) {
   if (!json) return null;
   else {
     document.body.classList.add("noscroll");
@@ -120,13 +168,13 @@ function onJson(json) {
       modal_search.appendChild(msg);
     }
     for (item of lista_film) {
+      const nome = item.l;
       let poster;
       if (!item.i) {
         poster = placeholder_img;
       } else {
         poster = item.i.imageUrl;
       }
-      const nome = item.l;
       const movie_list = document.createElement("li");
       const poster_url = document.createElement("img");
       poster_url.src = poster;
@@ -135,17 +183,21 @@ function onJson(json) {
       movie_list.appendChild(title);
       movie_list.appendChild(poster_url);
       movie_list.addEventListener("click", stopProp);
+      const content_type = item.qid;
+      if (content_type === "videoGame") {
+        game_name = nome;
+        movie_list.addEventListener("click", show_game_info);
+      } else if (content_type === "musicVideo") {
+        song_name = nome;
+        movie_list.addEventListener("click", show_music_info);
+      } else {
+        movie_name = nome;
+        movie_list.addEventListener("click", show_movie_info);
+      }
       modal_search.appendChild(movie_list);
     }
     modal_search.scrollIntoView();
   }
-}
-
-function onResponse(response) {
-  if (!response.ok) {
-    console.log("Error: " + response);
-    return null;
-  } else return response.json();
 }
 
 function search(event) {
@@ -161,7 +213,7 @@ function search(event) {
       "X-RapidAPI-Host": "imdb8.p.rapidapi.com",
     },
   };
-  fetch(url, options).then(onResponse).then(onJson);
+  fetch(url, options).then(onResponse).then(onJson_Imdb);
 }
 
 loginitem.addEventListener("click", login);
