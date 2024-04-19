@@ -108,6 +108,7 @@ let token;
 let game_name;
 let song_name;
 let movie_name;
+let retry = false;
 let first_request = true;
 
 function show_movie_info() {}
@@ -131,9 +132,11 @@ function onResponse(response) {
   } else return response.json();
 }
 
-function onErrorCors(error) {
-  console.clear();
-  return null;
+function onResponseCors(response) {
+  if (!response.ok) {
+    console.clear();
+    retry = true;
+  } else return response.json().then(show_game);
 }
 
 async function show_game_info() {
@@ -146,6 +149,7 @@ async function show_game_info() {
       "&grant_type=client_credentials";
     const options_token = { method: "POST" };
     fetch(url_token, options_token).then(onResponse).then(onTokenJson);
+    first_request = false;
   }
   const target_url = "https://api.igdb.com/v4/games";
   const cors_proxy = "https://corsproxy.io/?";
@@ -158,16 +162,12 @@ async function show_game_info() {
     },
     body: "fields age_ratings,aggregated_rating,aggregated_rating_count,alternative_names,artworks,bundles,category,checksum,collection,collections,cover,created_at,dlcs,expanded_games,expansions,external_games,first_release_date,follows,forks,franchise,franchises,game_engines,game_localizations,game_modes,genres,hypes,involved_companies,keywords,language_supports,multiplayer_modes,name,parent_game,platforms,player_perspectives,ports,rating,rating_count,release_dates,remakes,remasters,screenshots,similar_games,slug,standalone_expansions,status,storyline,summary,tags,themes,total_rating,total_rating_count,updated_at,url,version_parent,version_title,videos,websites;",
   };
-  if (first_request) {
-    const check = await fetch(cors_proxy + target_url, options).then(
-      onErrorCors
-    );
-    first_request = false;
+  const result = await fetch(cors_proxy + target_url, options).then(
+    onResponseCors
+  );
+  if (retry) {
+    retry = false;
     show_game_info();
-  } else {
-    fetch(cors_proxy + target_url, options)
-      .then(onResponse)
-      .then(show_game);
   }
 }
 
