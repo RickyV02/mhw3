@@ -110,6 +110,16 @@ let song_name;
 let movie_name;
 let first_request = true;
 
+function show_movie_info() {}
+
+function show_music_info() {
+  console.log("prova musica");
+}
+
+function show_game(json) {
+  console.log(json);
+}
+
 function onTokenJson(json) {
   token = json.access_token;
 }
@@ -124,16 +134,6 @@ function onResponse(response) {
 function onErrorCors(error) {
   console.clear();
   return null;
-}
-
-function show_movie_info() {}
-
-function show_music_info() {
-  console.log("prova musica");
-}
-
-function show_game(json) {
-  console.log(json);
 }
 
 async function show_game_info() {
