@@ -140,14 +140,16 @@ function onErrorCors(error) {
 }
 
 async function show_game_info() {
-  const url_token =
-    "https://id.twitch.tv/oauth2/token?client_id=" +
-    client_id_twitch +
-    "&client_secret=" +
-    client_secret_twitch +
-    "&grant_type=client_credentials";
-  const options_token = { method: "POST" };
-  fetch(url_token, options_token).then(onResponse).then(onTokenJson);
+  if (first_request) {
+    const url_token =
+      "https://id.twitch.tv/oauth2/token?client_id=" +
+      client_id_twitch +
+      "&client_secret=" +
+      client_secret_twitch +
+      "&grant_type=client_credentials";
+    const options_token = { method: "POST" };
+    fetch(url_token, options_token).then(onResponse).then(onTokenJson);
+  }
   const target_url = "https://api.igdb.com/v4/games";
   const cors_proxy = "https://corsproxy.io/?";
   const options = {
