@@ -9,7 +9,7 @@ const newsitem = document.querySelectorAll("#show_more");
 const form = document.querySelector("form");
 const placeholder_img =
   "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/330px-No-Image-Placeholder.svg.png";
-const api_key = "e9fed50942msh83110b0212f82bfp1a1848jsnee772af8e5e0";
+const api_key = "a651580f21mshb17176ebf41df00p1d3654jsn21f531773e64";
 const client_id_twitch = "12h3bsf6as2gx17rhtrnjjx0bfkr03";
 const client_secret_twitch = "cdpi68gukavd5evpooq9pn3bk31ugg";
 
@@ -105,16 +105,12 @@ function showmore(event) {
 ///////////////////////////////////////////////////////////////////////////////////////
 
 let token;
+let res;
 let game_name;
 let song_name;
 let movie_name;
-
-function onResponse(response) {
-  if (!response.ok) {
-    console.log("Error: " + response);
-    return null;
-  } else return response.json();
-}
+let first_request = true;
+let retry = true;
 
 function onTokenJson(json) {
   token = json.access_token;
@@ -130,7 +126,20 @@ function show_game(json) {
   console.log(json);
 }
 
-function show_game_info() {
+function onResponse(response) {
+  if (!response.ok) {
+    console.log("Error: " + response);
+    return null;
+  } else return response.json();
+}
+
+function onErrorCors(error) {
+  //console.clear();
+  first_request = false;
+  return true;
+}
+
+async function show_game_info() {
   const url_token =
     "https://id.twitch.tv/oauth2/token?client_id=" +
     client_id_twitch +
@@ -139,9 +148,9 @@ function show_game_info() {
     "&grant_type=client_credentials";
   const options_token = { method: "POST" };
   fetch(url_token, options_token).then(onResponse).then(onTokenJson);
-  const cors_proxy = "https://corsproxy.io/?";
   const target_url = "https://api.igdb.com/v4/games";
-  fetch(cors_proxy + target_url, {
+  const cors_proxy = "https://corsproxy.io/?";
+  const options = {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -149,9 +158,18 @@ function show_game_info() {
       Authorization: "Bearer " + token,
     },
     body: "fields age_ratings,aggregated_rating,aggregated_rating_count,alternative_names,artworks,bundles,category,checksum,collection,collections,cover,created_at,dlcs,expanded_games,expansions,external_games,first_release_date,follows,forks,franchise,franchises,game_engines,game_localizations,game_modes,genres,hypes,involved_companies,keywords,language_supports,multiplayer_modes,name,parent_game,platforms,player_perspectives,ports,rating,rating_count,release_dates,remakes,remasters,screenshots,similar_games,slug,standalone_expansions,status,storyline,summary,tags,themes,total_rating,total_rating_count,updated_at,url,version_parent,version_title,videos,websites;",
-  })
-    .then(onResponse)
-    .then(show_game);
+  };
+  if (first_request) {
+    res = await fetch(cors_proxy + target_url, options).then(onErrorCors);
+  } else {
+    fetch(cors_proxy + target_url, options)
+      .then(onResponse)
+      .then(show_game);
+  }
+  if (res) {
+    show_game_info();
+    res = false;
+  }
 }
 
 function onJson_Imdb(json) {
