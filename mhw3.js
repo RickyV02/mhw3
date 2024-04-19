@@ -110,7 +110,6 @@ let game_name;
 let song_name;
 let movie_name;
 let first_request = true;
-let retry = true;
 
 function onTokenJson(json) {
   token = json.access_token;
