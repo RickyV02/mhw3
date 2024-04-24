@@ -133,7 +133,7 @@ function onResponse(response) {
 
 function onResponseCors(response) {
   if (!response.ok) {
-    console.clear();
+    //console.clear();
     retry = true;
   } else return response.json().then(show_game);
 }
@@ -166,8 +166,10 @@ async function show_game_info(event) {
       Authorization: "Bearer " + game_token,
     },
     body:
-      "fields id,name,release_dates.*,cover.*,genres.*;" +
+      "fields name,alternative_names.name,genres.name,release_dates.*,cover.*,genres.*,summary,storyline,rating,platforms.name,themes.name;" +
       'where name = "' +
+      game_name +
+      '" | alternative_names.name = "' +
       game_name +
       '";',
   };
