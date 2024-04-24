@@ -104,9 +104,11 @@ function showmore(event) {
 
 ///////////////////////////////////////////////////////////////////////////////////////
 
-let token;
+let game_name;
+let game_token;
 let retry = false;
 let first_request = true;
+let result = true;
 
 function show_movie_info() {}
 
@@ -119,7 +121,7 @@ function show_game(json) {
 }
 
 function onTokenJson(json) {
-  token = json.access_token;
+  game_token = json.access_token;
 }
 
 function onResponse(response) {
@@ -131,12 +133,12 @@ function onResponse(response) {
 
 function onResponseCors(response) {
   if (!response.ok) {
-    //console.clear();
+    console.clear();
     retry = true;
   } else return response.json().then(show_game);
 }
 
-async function show_game_info() {
+async function show_game_info(event) {
   if (first_request) {
     const url_token =
       "https://id.twitch.tv/oauth2/token?client_id=" +
@@ -148,7 +150,12 @@ async function show_game_info() {
     fetch(url_token, options_token).then(onResponse).then(onTokenJson);
     first_request = false;
   }
-  console.log(game_name);
+  if (!result) {
+    result = true;
+  } else {
+    const name_li = event.currentTarget.querySelector("h2");
+    game_name = name_li.textContent;
+  }
   const target_url = "https://api.igdb.com/v4/games/";
   const cors_proxy = "https://corsproxy.io/?";
   const options = {
@@ -156,15 +163,20 @@ async function show_game_info() {
     headers: {
       Accept: "application/json",
       "Client-ID": client_id_twitch,
-      Authorization: "Bearer " + token,
+      Authorization: "Bearer " + game_token,
     },
-    body: 'fields name,release_dates.*,cover.*,genres.*; where name = "Nioh";',
+    body:
+      "fields id,name,release_dates.*,cover.*,genres.*;" +
+      'where name = "' +
+      game_name +
+      '";',
   };
-  const result = await fetch(cors_proxy + target_url, options).then(
+  const fetch_result = await fetch(cors_proxy + target_url, options).then(
     onResponseCors
   );
   if (retry) {
     retry = false;
+    result = false;
     show_game_info();
   }
 }
