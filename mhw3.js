@@ -114,10 +114,8 @@ function onTokenJson(json) {
   game_token = json.access_token;
 }
 
-function show_movie_info() {}
-
-function show_music_info() {
-  console.log("prova musica");
+function show_general_info(event) {
+  
 }
 
 function show_game(json) {
@@ -269,10 +267,8 @@ function onJson_Imdb(json) {
       const content_type = item.qid;
       if (content_type === "videoGame") {
         movie_list.addEventListener("click", show_game_info);
-      } else if (content_type === "musicVideo") {
-        movie_list.addEventListener("click", show_music_info);
       } else {
-        movie_list.addEventListener("click", show_movie_info);
+        movie_list.addEventListener("click", show_general_info);
       }
       modal_search.appendChild(movie_list);
     }

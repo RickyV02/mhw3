@@ -251,7 +251,7 @@ nav input[type="text"] {
   gap: 10%;
   padding: 1% 1%;
   border-radius: 10px;
-  margin: 1%;
+  margin: 1% 2%;
 }
 
 .modal_game div {
@@ -261,17 +261,20 @@ nav input[type="text"] {
 
 .modal_game div p {
   font-size: 1.2em;
+  line-height: 1.1em;
   color: antiquewhite;
   font-style: italic;
   margin-bottom: auto;
   box-shadow: 2px 2px 2px 2px black;
-  border: solid 1px black;
+  border: solid 2px black;
   padding: 3px 3px;
 }
 
 .modal_game img {
   border-radius: 5px;
   border: solid 2px black;
+  max-height: 374px;
+  max-width: 264px;
 }
 
 #modal_search h2 {
