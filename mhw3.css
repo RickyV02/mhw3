@@ -238,8 +238,40 @@ nav input[type="text"] {
   background: #272727;
 }
 
-#modal_search img {
+#modal_search li img {
   max-width: 150px;
+}
+
+.modal_game {
+  background-color: #272727;
+  display: flex;
+  width: auto;
+  height: auto;
+  justify-content: space-between;
+  gap: 10%;
+  padding: 1% 1%;
+  border-radius: 10px;
+  margin: 1%;
+}
+
+.modal_game div {
+  display: flex;
+  flex-direction: column;
+}
+
+.modal_game div p {
+  font-size: 1.2em;
+  color: antiquewhite;
+  font-style: italic;
+  margin-bottom: auto;
+  box-shadow: 2px 2px 2px 2px black;
+  border: solid 1px black;
+  padding: 3px 3px;
+}
+
+.modal_game img {
+  border-radius: 5px;
+  border: solid 2px black;
 }
 
 #modal_search h2 {

@@ -121,7 +121,59 @@ function show_music_info() {
 }
 
 function show_game(json) {
-  console.log(json);
+  modal_search.innerHTML = "";
+  for (item of json) {
+    const game = item;
+    const game_div = document.createElement("div");
+    game_div.classList.add("modal_game");
+    const game_cover = document.createElement("img");
+    const img_id = game.cover.image_id;
+    const cover_url =
+      "https://images.igdb.com/igdb/image/upload/t_cover_big/" +
+      img_id +
+      ".jpg";
+    game_cover.src = cover_url;
+    const game_info = document.createElement("div");
+    const game_title = document.createElement("p");
+    game_title.textContent = game.name;
+    const game_genre = document.createElement("p");
+    game_genre.textContent = "Genres: ";
+    for (item of game.genres) {
+      game_genre.textContent += item.name + " ";
+    }
+    const game_platform = document.createElement("p");
+    game_platform.textContent = "Platforms: ";
+    for (item of game.platforms) {
+      game_platform.textContent += item.name + " ";
+    }
+    const first_release = document.createElement("p");
+    first_release.textContent =
+      "First Release Date: " + game.release_dates[0].human;
+    const themes = document.createElement("p");
+    themes.textContent = "Themes: ";
+    for (item of game.themes) {
+      themes.textContent += item.name + " ";
+    }
+    const summary = document.createElement("p");
+    summary.textContent = "Summary: " + game.summary;
+    const storyline = document.createElement("p");
+    storyline.textContent = "Storyline: " + game.storyline;
+    game_info.appendChild(game_title);
+    game_info.appendChild(game_genre);
+    game_info.appendChild(game_platform);
+    game_info.appendChild(themes);
+    game_info.appendChild(first_release);
+    if (summary.textContent !== "Summary: undefined") {
+      game_info.appendChild(summary);
+    }
+    if (storyline.textContent !== "Storyline: undefined") {
+      game_info.appendChild(storyline);
+    }
+    game_div.appendChild(game_cover);
+    game_div.appendChild(game_info);
+    game_div.addEventListener("click", stopProp);
+    modal_search.appendChild(game_div);
+  }
 }
 
 function onResponse(response) {
@@ -166,7 +218,7 @@ async function show_game_info(event) {
       Authorization: "Bearer " + game_token,
     },
     body:
-      "fields name,alternative_names.name,genres.name,release_dates.*,cover.*,genres.*,summary,storyline,rating,platforms.name,themes.name;" +
+      "fields id,name,alternative_names.name,genres.name,release_dates.*,cover.image_id,genres.*,summary,storyline,rating,platforms.name,themes.name;" +
       'where name = "' +
       game_name +
       '" | alternative_names.name = "' +
