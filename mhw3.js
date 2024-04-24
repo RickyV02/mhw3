@@ -105,9 +105,6 @@ function showmore(event) {
 ///////////////////////////////////////////////////////////////////////////////////////
 
 let token;
-let game_name;
-let song_name;
-let movie_name;
 let retry = false;
 let first_request = true;
 
@@ -134,7 +131,7 @@ function onResponse(response) {
 
 function onResponseCors(response) {
   if (!response.ok) {
-    console.clear();
+    //console.clear();
     retry = true;
   } else return response.json().then(show_game);
 }
@@ -151,7 +148,8 @@ async function show_game_info() {
     fetch(url_token, options_token).then(onResponse).then(onTokenJson);
     first_request = false;
   }
-  const target_url = "https://api.igdb.com/v4/games";
+  console.log(game_name);
+  const target_url = "https://api.igdb.com/v4/games/";
   const cors_proxy = "https://corsproxy.io/?";
   const options = {
     method: "POST",
@@ -160,11 +158,7 @@ async function show_game_info() {
       "Client-ID": client_id_twitch,
       Authorization: "Bearer " + token,
     },
-    body:
-      "fields age_ratings,aggregated_rating,aggregated_rating_count,alternative_names,artworks,bundles,category,checksum,collection,collections,cover,created_at,dlcs,expanded_games,expansions,external_games,first_release_date,follows,forks,franchise,franchises,game_engines,game_localizations,game_modes,genres,hypes,involved_companies,keywords,language_supports,multiplayer_modes,name,parent_game,platforms,player_perspectives,ports,rating,rating_count,release_dates,remakes,remasters,screenshots,similar_games,slug,standalone_expansions,status,storyline,summary,tags,themes,total_rating,total_rating_count,updated_at,url,version_parent,version_title,videos,websites;" +
-      'search "' +
-      game_name +
-      '";',
+    body: 'fields name,release_dates.*,cover.*,genres.*; where name = "Nioh";',
   };
   const result = await fetch(cors_proxy + target_url, options).then(
     onResponseCors
@@ -208,13 +202,10 @@ function onJson_Imdb(json) {
       movie_list.addEventListener("click", stopProp);
       const content_type = item.qid;
       if (content_type === "videoGame") {
-        game_name = nome;
         movie_list.addEventListener("click", show_game_info);
       } else if (content_type === "musicVideo") {
-        song_name = nome;
         movie_list.addEventListener("click", show_music_info);
       } else {
-        movie_name = nome;
         movie_list.addEventListener("click", show_movie_info);
       }
       modal_search.appendChild(movie_list);
