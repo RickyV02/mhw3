@@ -117,6 +117,14 @@ function onTokenJson(json) {
 function show_general_info(json) {
   const film_json = json.data.mainSearch.edges[0].node.entity;
   console.log(film_json);
+  modal_search.innerHTML = "";
+  const movie_div = document.createElement("div");
+  movie_div.classList.add("modal_game");
+  const movie_poster = document.createElement("img");
+  movie_poster.src = film_json.primaryImage.url;
+  movie_div.appendChild(movie_poster);
+  movie_div.addEventListener("click", stopProp);
+  modal_search.appendChild(movie_div);
 }
 
 function show_tv_info(event) {
@@ -317,16 +325,16 @@ function search(event) {
   event.preventDefault();
   const movie_input = document.querySelector("#movie_name");
   const movie_name = encodeURIComponent(movie_input.value);
-  if (movie_name !== ""){
-      const url = "https://imdb8.p.rapidapi.com/auto-complete?q=" + movie_name;
-  const options = {
-    method: "GET",
-    headers: {
-      "X-RapidAPI-Key": api_key,
-      "X-RapidAPI-Host": "imdb8.p.rapidapi.com",
-    },
-  };
-  fetch(url, options).then(onResponse).then(onJson_Imdb);
+  if (movie_name !== "") {
+    const url = "https://imdb8.p.rapidapi.com/auto-complete?q=" + movie_name;
+    const options = {
+      method: "GET",
+      headers: {
+        "X-RapidAPI-Key": api_key,
+        "X-RapidAPI-Host": "imdb8.p.rapidapi.com",
+      },
+    };
+    fetch(url, options).then(onResponse).then(onJson_Imdb);
   }
 }
 
