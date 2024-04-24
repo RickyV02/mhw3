@@ -110,6 +110,10 @@ let retry = false;
 let first_request = true;
 let result = true;
 
+function onTokenJson(json) {
+  game_token = json.access_token;
+}
+
 function show_movie_info() {}
 
 function show_music_info() {
@@ -118,10 +122,6 @@ function show_music_info() {
 
 function show_game(json) {
   console.log(json);
-}
-
-function onTokenJson(json) {
-  game_token = json.access_token;
 }
 
 function onResponse(response) {
@@ -133,7 +133,7 @@ function onResponse(response) {
 
 function onResponseCors(response) {
   if (!response.ok) {
-    //console.clear();
+    console.clear();
     retry = true;
   } else return response.json().then(show_game);
 }
