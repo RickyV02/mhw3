@@ -114,8 +114,43 @@ function onTokenJson(json) {
   game_token = json.access_token;
 }
 
-function show_general_info(event) {
-  
+function show_general_info(json) {
+  const film_json = json.data.mainSearch.edges[0].node.entity;
+  console.log(film_json);
+}
+
+function show_tv_info(event) {
+  const name_li = event.currentTarget.querySelector("h2");
+  const research_name = name_li.textContent;
+  const url =
+    "https://imdb8.p.rapidapi.com/v2/search?searchTerm=" +
+    encodeURIComponent(research_name) +
+    "&type=TV&first=1";
+  const options = {
+    method: "GET",
+    headers: {
+      "X-RapidAPI-Key": api_key,
+      "X-RapidAPI-Host": "imdb8.p.rapidapi.com",
+    },
+  };
+  fetch(url, options).then(onResponse).then(show_general_info);
+}
+
+function show_movie_info(event) {
+  const name_li = event.currentTarget.querySelector("h2");
+  const research_name = name_li.textContent;
+  const url =
+    "https://imdb8.p.rapidapi.com/v2/search?searchTerm=" +
+    encodeURIComponent(research_name) +
+    "&type=MOVIE&first=1";
+  const options = {
+    method: "GET",
+    headers: {
+      "X-RapidAPI-Key": api_key,
+      "X-RapidAPI-Host": "imdb8.p.rapidapi.com",
+    },
+  };
+  fetch(url, options).then(onResponse).then(show_general_info);
 }
 
 function show_game(json) {
@@ -267,8 +302,10 @@ function onJson_Imdb(json) {
       const content_type = item.qid;
       if (content_type === "videoGame") {
         movie_list.addEventListener("click", show_game_info);
-      } else {
-        movie_list.addEventListener("click", show_general_info);
+      } else if (content_type === "movie") {
+        movie_list.addEventListener("click", show_movie_info);
+      } else if (content_type === "tvSeries") {
+        movie_list.addEventListener("click", show_tv_info);
       }
       modal_search.appendChild(movie_list);
     }
@@ -280,8 +317,8 @@ function search(event) {
   event.preventDefault();
   const movie_input = document.querySelector("#movie_name");
   const movie_name = encodeURIComponent(movie_input.value);
-
-  const url = "https://imdb8.p.rapidapi.com/auto-complete?q=" + movie_name;
+  if (movie_name !== ""){
+      const url = "https://imdb8.p.rapidapi.com/auto-complete?q=" + movie_name;
   const options = {
     method: "GET",
     headers: {
@@ -290,6 +327,7 @@ function search(event) {
     },
   };
   fetch(url, options).then(onResponse).then(onJson_Imdb);
+  }
 }
 
 loginitem.addEventListener("click", login);
