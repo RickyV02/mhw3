@@ -114,10 +114,13 @@ function onTokenJson(json) {
   game_token = json.access_token;
 }
 
-function show_general_info(json) {
+function show_actor(json) {
+  
+}
+
+function show_movie(json) {
   modal_search.innerHTML = "";
-  const film = json.data.mainSearch.edges[0].node.entity;
-  console.log(film);
+  const film = json;
   const movie_div = document.createElement("div");
   movie_div.classList.add("modal_game");
   const poster = document.createElement("img");
@@ -136,75 +139,101 @@ function show_general_info(json) {
     film.releaseDate.month +
     "/" +
     film.releaseDate.year;
-  const releaseCountry = document.createElement("p");
-  releaseCountry.textContent = "Country: " + film.releaseDate.country.id;
   movie_info.appendChild(releaseDate);
-  movie_info.appendChild(releaseCountry);
-  if (film.episodes) {
+  const rating = document.createElement("p");
+  rating.textContent = "Rating Summary: " + film.ratingsSummary.aggregateRating;
+  movie_info.appendChild(rating);
+  if (film.canHaveEpisodes) {
     const ep = document.createElement("p");
     ep.textContent = "Episodes: " + film.episodes.episodes.total;
     movie_info.appendChild(ep);
   }
+  const genres = document.createElement("p");
+  genres.textContent = "Genres: ";
+  for (item of film.genres.genres) {
+    genres.textContent += item.text + " ";
+  }
+  movie_info.appendChild(genres);
+  const country = document.createElement("p");
+  country.textContent = "Countries of Origin: ";
+  for (item of film.countriesOfOrigin.countries) {
+    country.textContent += item.id + "";
+  }
+  movie_info.appendChild(country);
+  if (film.directors.length !== 0) {
+    const director = document.createElement("p");
+    director.textContent = "Director: ";
+    for (item of film.directors) {
+      director.textContent += item.credits[0].name.nameText.text;
+    }
+    movie_info.appendChild(director);
+  }
+  const mainplot = document.createElement("p");
+  mainplot.textContent = "Plot: " + film.plot.plotText.plainText;
+  movie_info.appendChild(mainplot);
   const movie_credits = document.createElement("section");
   movie_credits.classList.add("credits");
-  const credits = film.principalCredits[0].credits;
-  for (item of credits) {
-    const obj = item.name;
+  const cast = film.cast.edges;
+  for (item of cast) {
+    const movie_li = document.createElement("li");
+    const obj = item.node;
     const actor_name = document.createElement("p");
-    actor_name.textContent = obj.nameText.text;
+    actor_name.textContent = obj.name.nameText.text;
+    movie_li.appendChild(actor_name);
     const img = document.createElement("img");
-    if (!obj.primaryImage) {
+    if (!obj.name.primaryImage) {
       img.src = placeholder_img;
     } else {
-      img.src = obj.primaryImage.url;
+      img.src = obj.name.primaryImage.url;
     }
-    const movie_li = document.createElement("li");
-    movie_li.appendChild(actor_name);
+    for (item of obj.characters) {
+      const character = document.createElement("p");
+      character.textContent = item.name;
+      movie_li.appendChild(character);
+    }
     movie_li.appendChild(img);
     movie_credits.appendChild(movie_li);
   }
   const movie_cast = document.createElement("p");
-  movie_cast.textContent = "Credits: ";
+  movie_cast.textContent = "Cast: ";
+  movie_cast.appendChild(movie_credits);
   movie_info.appendChild(movie_cast);
-  movie_info.appendChild(movie_credits);
   movie_div.appendChild(poster);
   movie_div.appendChild(movie_info);
   movie_div.addEventListener("click", stopProp);
   modal_search.appendChild(movie_div);
 }
 
-function show_tv_info(event) {
-  const name_li = event.currentTarget.querySelector("h2");
-  const research_name = name_li.textContent;
+function show_nm_info(event) {
+  const id = event.currentTarget.querySelector("p");
+  const research_id = id.textContent;
   const url =
-    "https://imdb8.p.rapidapi.com/v2/search?searchTerm=" +
-    encodeURIComponent(research_name) +
-    "&type=TV&first=1";
+    "https://imdb146.p.rapidapi.com/v1/name/?id=" +
+    encodeURIComponent(research_id);
   const options = {
     method: "GET",
     headers: {
       "X-RapidAPI-Key": api_key,
-      "X-RapidAPI-Host": "imdb8.p.rapidapi.com",
+      "X-RapidAPI-Host": "imdb146.p.rapidapi.com",
     },
   };
-  fetch(url, options).then(onResponse).then(show_general_info);
+  fetch(url, options).then(onResponse).then(show_actor);
 }
 
 function show_movie_info(event) {
-  const name_li = event.currentTarget.querySelector("h2");
-  const research_name = name_li.textContent;
+  const id = event.currentTarget.querySelector("p");
+  const research_id = id.textContent;
   const url =
-    "https://imdb8.p.rapidapi.com/v2/search?searchTerm=" +
-    encodeURIComponent(research_name) +
-    "&type=MOVIE&first=1";
+    "https://imdb146.p.rapidapi.com/v1/title/?id=" +
+    encodeURIComponent(research_id);
   const options = {
     method: "GET",
     headers: {
       "X-RapidAPI-Key": api_key,
-      "X-RapidAPI-Host": "imdb8.p.rapidapi.com",
+      "X-RapidAPI-Host": "imdb146.p.rapidapi.com",
     },
   };
-  fetch(url, options).then(onResponse).then(show_general_info);
+  fetch(url, options).then(onResponse).then(show_movie);
 }
 
 function show_game(json) {
@@ -351,16 +380,18 @@ function onJson_Imdb(json) {
       poster_url.src = poster;
       const title = document.createElement("h2");
       title.textContent = nome;
+      const movie_id = item.id;
+      const hiddenID = document.createElement("p");
+      hiddenID.textContent = movie_id;
+      hiddenID.classList.add("nascosto");
+      movie_list.appendChild(hiddenID);
       movie_list.appendChild(title);
       movie_list.appendChild(poster_url);
       movie_list.addEventListener("click", stopProp);
-      const content_type = item.qid;
-      if (content_type === "videoGame") {
-        movie_list.addEventListener("click", show_game_info);
-      } else if (content_type === "movie") {
+      if (movie_id.includes("tt")) {
         movie_list.addEventListener("click", show_movie_info);
-      } else if (content_type === "tvSeries") {
-        movie_list.addEventListener("click", show_tv_info);
+      } else if (movie_id.includes("nm")) {
+        movie_list.addEventListener("click", show_nm_info);
       }
       modal_search.appendChild(movie_list);
     }
