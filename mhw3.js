@@ -9,7 +9,7 @@ const newsitem = document.querySelectorAll("#show_more");
 const form = document.querySelector("form");
 const placeholder_img =
   "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/330px-No-Image-Placeholder.svg.png";
-const api_key = "a651580f21mshb17176ebf41df00p1d3654jsn21f531773e64";
+const api_key = "17d4cbc601mshdf748d30e539c36p12f7abjsn768814760e84";
 const client_id_twitch = "12h3bsf6as2gx17rhtrnjjx0bfkr03";
 const client_secret_twitch = "cdpi68gukavd5evpooq9pn3bk31ugg";
 
@@ -115,14 +115,60 @@ function onTokenJson(json) {
 }
 
 function show_general_info(json) {
-  const film_json = json.data.mainSearch.edges[0].node.entity;
-  console.log(film_json);
   modal_search.innerHTML = "";
+  const film = json.data.mainSearch.edges[0].node.entity;
+  console.log(film);
   const movie_div = document.createElement("div");
   movie_div.classList.add("modal_game");
-  const movie_poster = document.createElement("img");
-  movie_poster.src = film_json.primaryImage.url;
-  movie_div.appendChild(movie_poster);
+  const poster = document.createElement("img");
+  poster.classList.add("cover");
+  poster.src = film.primaryImage.url;
+  movie_div.appendChild(poster);
+  const movie_info = document.createElement("div");
+  const movie_title = document.createElement("p");
+  movie_title.textContent = film.titleText.text;
+  movie_info.appendChild(movie_title);
+  const releaseDate = document.createElement("p");
+  releaseDate.textContent =
+    "Release Date: " +
+    film.releaseDate.day +
+    "/" +
+    film.releaseDate.month +
+    "/" +
+    film.releaseDate.year;
+  const releaseCountry = document.createElement("p");
+  releaseCountry.textContent = "Country: " + film.releaseDate.country.id;
+  movie_info.appendChild(releaseDate);
+  movie_info.appendChild(releaseCountry);
+  if (film.episodes) {
+    const ep = document.createElement("p");
+    ep.textContent = "Episodes: " + film.episodes.episodes.total;
+    movie_info.appendChild(ep);
+  }
+  const movie_credits = document.createElement("section");
+  movie_credits.classList.add("credits");
+  const credits = film.principalCredits[0].credits;
+  for (item of credits) {
+    const obj = item.name;
+    const actor_name = document.createElement("p");
+    actor_name.textContent = obj.nameText.text;
+    const img = document.createElement("img");
+    if (!obj.primaryImage) {
+      img.src = placeholder_img;
+    } else {
+      img.src = obj.primaryImage.url;
+    }
+    const movie_li = document.createElement("li");
+    movie_li.appendChild(actor_name);
+    movie_li.appendChild(img);
+    movie_credits.appendChild(movie_li);
+  }
+  const movie_cast = document.createElement("p");
+  movie_cast.textContent = "Credits: ";
+  movie_info.appendChild(movie_cast);
+  movie_info.appendChild(movie_credits);
+  movie_div.appendChild(poster);
+  movie_div.appendChild(movie_info);
   movie_div.addEventListener("click", stopProp);
   modal_search.appendChild(movie_div);
 }
@@ -174,6 +220,7 @@ function show_game(json) {
       img_id +
       ".jpg";
     game_cover.src = cover_url;
+    game_cover.classList.add("cover");
     const game_info = document.createElement("div");
     const game_title = document.createElement("p");
     game_title.textContent = game.name;

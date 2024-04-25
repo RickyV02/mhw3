@@ -248,7 +248,7 @@ nav input[type="text"] {
   width: auto;
   height: auto;
   justify-content: space-between;
-  gap: 10%;
+  gap: 1em;
   padding: 1% 1%;
   border-radius: 10px;
   margin: 1% 2%;
@@ -264,17 +264,47 @@ nav input[type="text"] {
   line-height: 1.1em;
   color: antiquewhite;
   font-style: italic;
-  margin-bottom: auto;
+  margin-top: 0;
+  margin-bottom: 1em;
   box-shadow: 2px 2px 2px 2px black;
   border: solid 2px black;
-  padding: 3px 3px;
+  padding: 5px 5px;
 }
 
-.modal_game img {
+.cover {
   border-radius: 5px;
   border: solid 2px black;
   max-height: 374px;
   max-width: 264px;
+}
+
+.credits {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding: auto;
+  margin: auto;
+}
+
+#modal_search .credits li {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3em;
+  cursor: default;
+}
+
+.credits li p {
+  width: max-content;
+}
+
+.credits li img {
+  max-height: 100px;
+  border-radius: 5px;
+  border: solid 2px black;
 }
 
 #modal_search h2 {
