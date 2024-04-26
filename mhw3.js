@@ -115,7 +115,103 @@ function onTokenJson(json) {
   game_token = json.access_token;
 }
 
-function show_actor(json) {}
+function show_name(json) {
+  console.log(json);
+  modal_search.innerHTML = "";
+  const cross = document.createElement("img");
+  cross.src = cross_src;
+  cross.classList.add("cross");
+  modal_search.appendChild(cross);
+  const movie_div = document.createElement("div");
+  movie_div.classList.add("modal_game");
+  const poster = document.createElement("img");
+  poster.classList.add("cover");
+  if (json.primaryImage !== null) {
+    poster.src = json.primaryImage.url;
+  } else {
+    poster.src = placeholder_img;
+  }
+  movie_div.appendChild(poster);
+  const movie_info = document.createElement("div");
+  const actor_name = document.createElement("p");
+  actor_name.textContent = json.nameText.text;
+  movie_info.appendChild(actor_name);
+  if (json.birthDate) {
+    const birthDay = document.createElement("p");
+    birthDay.textContent =
+      "Birth Date: " +
+      json.birthDate.dateComponents.day +
+      "/" +
+      json.birthDate.dateComponents.month +
+      "/" +
+      json.birthDate.dateComponents.year;
+    movie_info.appendChild(birthDay);
+  }
+  if (json.birthLocation) {
+    const birthLoc = document.createElement("p");
+    birthLoc.textContent = "Birth Location: " + json.birthLocation.text;
+    movie_info.appendChild(birthLoc);
+  }
+  if (json.deathDate) {
+    const deathDay = document.createElement("p");
+    deathDay.textContent =
+      "Death Date: " +
+      json.deathDate.dateComponents.day +
+      "/" +
+      json.deathDate.dateComponents.month +
+      "/" +
+      json.deathDate.dateComponents.year;
+    movie_info.appendChild(deathDay);
+  }
+  if (json.deathLocation) {
+    const deathLoc = document.createElement("p");
+    deathLoc.textContent = "Death Location: " + json.deathLocation.text;
+    movie_info.appendChild(deathLoc);
+  }
+  if (json.deathCause) {
+    const death_Cause = document.createElement("p");
+    death_Cause.textContent =
+      "Death Cause: " + json.deathCause.displayableProperty.value.plainText;
+    movie_info.appendChild(death_Cause);
+  }
+  if (json.wins.total !== 0) {
+    const info = document.createElement("p");
+    info.textContent = "Wins: " + json.wins.total;
+    movie_info.appendChild(info);
+  }
+  if (json.nominations.total !== 0) {
+    const info = document.createElement("p");
+    info.textContent = "Nominations: " + json.nominations.total;
+    movie_info.appendChild(info);
+  }
+  if (json.knownForFeature.edges.length !== 0) {
+    const movie_credits = document.createElement("section");
+    movie_credits.classList.add("credits");
+    const cast = json.knownForFeature.edges;
+    for (item of cast) {
+      const movie_li = document.createElement("li");
+      const obj = item.node.title;
+      const actor_name = document.createElement("p");
+      actor_name.textContent = obj.titleText.text;
+      movie_li.appendChild(actor_name);
+      const img = document.createElement("img");
+      if (!obj.primaryImage) {
+        img.src = placeholder_img;
+      } else {
+        img.src = obj.primaryImage.url;
+      }
+      movie_li.appendChild(img);
+      movie_credits.appendChild(movie_li);
+    }
+    const movie_cast = document.createElement("p");
+    movie_cast.textContent = "Known For: ";
+    movie_cast.appendChild(movie_credits);
+    movie_info.appendChild(movie_cast);
+  }
+  movie_div.appendChild(movie_info);
+  movie_div.addEventListener("click", stopProp);
+  modal_search.appendChild(movie_div);
+}
 
 function show_movie(json) {
   modal_search.innerHTML = "";
@@ -128,80 +224,98 @@ function show_movie(json) {
   movie_div.classList.add("modal_game");
   const poster = document.createElement("img");
   poster.classList.add("cover");
-  poster.src = film.primaryImage.url;
+  if (film.primaryImage !== null) {
+    poster.src = json.primaryImage.url;
+  } else {
+    poster.src = placeholder_img;
+  }
   movie_div.appendChild(poster);
   const movie_info = document.createElement("div");
   const movie_title = document.createElement("p");
   movie_title.textContent = film.titleText.text;
   movie_info.appendChild(movie_title);
-  const releaseDate = document.createElement("p");
-  releaseDate.textContent =
-    "Release Date: " +
-    film.releaseDate.day +
-    "/" +
-    film.releaseDate.month +
-    "/" +
-    film.releaseDate.year;
-  movie_info.appendChild(releaseDate);
-  const rating = document.createElement("p");
-  rating.textContent = "Rating Summary: " + film.ratingsSummary.aggregateRating;
-  movie_info.appendChild(rating);
+  if (film.releaseDate !== null) {
+    const releaseDate = document.createElement("p");
+    releaseDate.textContent =
+      "Release Date: " +
+      film.releaseDate.day +
+      "/" +
+      film.releaseDate.month +
+      "/" +
+      film.releaseDate.year;
+    movie_info.appendChild(releaseDate);
+  }
+  if (film.ratingsSummary.aggregateRating !== null) {
+    const rating = document.createElement("p");
+    rating.textContent =
+      "Rating Summary: " + film.ratingsSummary.aggregateRating;
+    movie_info.appendChild(rating);
+  }
   if (film.canHaveEpisodes) {
     const ep = document.createElement("p");
     ep.textContent = "Episodes: " + film.episodes.episodes.total;
     movie_info.appendChild(ep);
   }
-  const genres = document.createElement("p");
-  genres.textContent = "Genres: ";
-  for (item of film.genres.genres) {
-    genres.textContent += item.text + " ";
+  if (film.genres !== null) {
+    const genres = document.createElement("p");
+    genres.textContent = "Genres: ";
+    for (item of film.genres.genres) {
+      genres.textContent += item.text + " ";
+    }
+    movie_info.appendChild(genres);
   }
-  movie_info.appendChild(genres);
-  const country = document.createElement("p");
-  country.textContent = "Countries of Origin: ";
-  for (item of film.countriesOfOrigin.countries) {
-    country.textContent += item.id + "";
+  if (film.countriesOfOrigin !== null) {
+    const country = document.createElement("p");
+    country.textContent = "Countries of Origin: ";
+    for (item of film.countriesOfOrigin.countries) {
+      country.textContent += item.id + "";
+    }
+    movie_info.appendChild(country);
   }
-  movie_info.appendChild(country);
-  if (film.directors.length !== 0) {
+  if (film.directors.length !== 0 && film.directors.credits) {
     const director = document.createElement("p");
     director.textContent = "Director: ";
     for (item of film.directors) {
-      director.textContent += item.credits[0].name.nameText.text;
+      if (item.credits.length !== 0) {
+        director.textContent += item.credits[0].name.nameText.text;
+      }
     }
     movie_info.appendChild(director);
   }
-  const mainplot = document.createElement("p");
-  mainplot.textContent = "Plot: " + film.plot.plotText.plainText;
-  movie_info.appendChild(mainplot);
-  const movie_credits = document.createElement("section");
-  movie_credits.classList.add("credits");
-  const cast = film.cast.edges;
-  for (item of cast) {
-    const movie_li = document.createElement("li");
-    const obj = item.node;
-    const actor_name = document.createElement("p");
-    actor_name.textContent = obj.name.nameText.text;
-    movie_li.appendChild(actor_name);
-    const img = document.createElement("img");
-    if (!obj.name.primaryImage) {
-      img.src = placeholder_img;
-    } else {
-      img.src = obj.name.primaryImage.url;
-    }
-    for (item of obj.characters) {
-      const character = document.createElement("p");
-      character.textContent = item.name;
-      movie_li.appendChild(character);
-    }
-    movie_li.appendChild(img);
-    movie_credits.appendChild(movie_li);
+  if (film.plot !== null) {
+    const mainplot = document.createElement("p");
+    mainplot.textContent = "Plot: " + film.plot.plotText.plainText;
+    movie_info.appendChild(mainplot);
   }
-  const movie_cast = document.createElement("p");
-  movie_cast.textContent = "Cast: ";
-  movie_cast.appendChild(movie_credits);
-  movie_info.appendChild(movie_cast);
-  movie_div.appendChild(poster);
+  if (film.cast.edges.length !== 0) {
+    const movie_credits = document.createElement("section");
+    movie_credits.classList.add("credits");
+    const cast = film.cast.edges;
+    for (item of cast) {
+      const movie_li = document.createElement("li");
+      const obj = item.node;
+      const actor_name = document.createElement("p");
+      actor_name.textContent = obj.name.nameText.text;
+      movie_li.appendChild(actor_name);
+      const img = document.createElement("img");
+      if (!obj.name.primaryImage) {
+        img.src = placeholder_img;
+      } else {
+        img.src = obj.name.primaryImage.url;
+      }
+      for (item of obj.characters) {
+        const character = document.createElement("p");
+        character.textContent = item.name;
+        movie_li.appendChild(character);
+      }
+      movie_li.appendChild(img);
+      movie_credits.appendChild(movie_li);
+    }
+    const movie_cast = document.createElement("p");
+    movie_cast.textContent = "Cast: ";
+    movie_cast.appendChild(movie_credits);
+    movie_info.appendChild(movie_cast);
+  }
   movie_div.appendChild(movie_info);
   movie_div.addEventListener("click", stopProp);
   modal_search.appendChild(movie_div);
@@ -220,7 +334,7 @@ function show_nm_info(event) {
       "X-RapidAPI-Host": "imdb146.p.rapidapi.com",
     },
   };
-  fetch(url, options).then(onResponse).then(show_actor);
+  fetch(url, options).then(onResponse).then(show_name);
 }
 
 function show_movie_info(event) {
