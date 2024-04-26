@@ -116,7 +116,6 @@ function onTokenJson(json) {
 }
 
 function show_name(json) {
-  console.log(json);
   modal_search.innerHTML = "";
   const cross = document.createElement("img");
   cross.src = cross_src;
@@ -303,10 +302,13 @@ function show_movie(json) {
       } else {
         img.src = obj.name.primaryImage.url;
       }
-      for (item of obj.characters) {
-        const character = document.createElement("p");
-        character.textContent = item.name;
-        movie_li.appendChild(character);
+      const ch = obj.characters;
+      if (ch !== null) {
+        for (item of ch) {
+          const character = document.createElement("p");
+          character.textContent = item.name;
+          movie_li.appendChild(character);
+        }
       }
       movie_li.appendChild(img);
       movie_credits.appendChild(movie_li);

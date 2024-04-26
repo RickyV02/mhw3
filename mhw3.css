@@ -230,7 +230,6 @@ nav input[type="text"] {
   align-items: center;
   list-style: none;
   min-height: 20%;
-  max-width: 25%;
   margin: 10px;
   padding: 15px;
   border-radius: 12px;
@@ -248,7 +247,8 @@ nav input[type="text"] {
 }
 
 #modal_search li img {
-  max-width: 150px;
+  max-height: 200px;
+  max-width: 250px;
   border-radius: 5px;
   border: solid 2px black;
 }
@@ -321,12 +321,6 @@ nav input[type="text"] {
   background-color: #2c3440;
   border: solid 2px black;
   cursor: default;
-}
-
-.credits li img {
-  max-height: 100px;
-  border-radius: 5px;
-  border: solid 2px black;
 }
 
 .modal_div {
