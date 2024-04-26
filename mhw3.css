@@ -135,12 +135,6 @@ nav input[type="text"] {
   height: 100%;
 }
 
-@media (max-width: 1000px) {
-  .logo {
-    display: none;
-  }
-}
-
 .navsection nav {
   display: flex;
   justify-content: space-between;
@@ -151,6 +145,12 @@ nav input[type="text"] {
 
 .navsection nav a span {
   color: #d8e0d8;
+}
+
+@media (max-width: 1000px) {
+  .logo {
+    display: none;
+  }
 }
 
 #loginwindow {
@@ -236,6 +236,17 @@ nav input[type="text"] {
   border-radius: 12px;
   text-align: center;
   background: #272727;
+  border: solid 2px #14181c;
+}
+
+#modal_search .cross {
+  padding: 0;
+  margin-top: 1%;
+  margin-right: 1%;
+  margin-left: auto;
+  margin-bottom: 0;
+  width: 20px;
+  height: 20px;
 }
 
 #modal_search li img {
@@ -264,6 +275,7 @@ nav input[type="text"] {
   padding: 1% 1%;
   border-radius: 10px;
   margin: 1% 2%;
+  border: solid 2px #14181c;
 }
 
 .modal_game div {
@@ -308,14 +320,9 @@ nav input[type="text"] {
   list-style: none;
   align-items: center;
   justify-content: center;
-  gap: 0.3em;
   background-color: #2c3440;
   border: solid 2px black;
   cursor: default;
-}
-
-.credits li p {
-  width: max-content;
 }
 
 .credits li img {
@@ -585,6 +592,14 @@ input[type="checkbox"] {
   width: 310px;
   border: none;
   margin-bottom: 10px;
+}
+
+@media (max-width: 970px) {
+  .arancione,
+  .azzurro,
+  .verde {
+    width: 600px;
+  }
 }
 
 .arancione img,
@@ -874,7 +889,7 @@ h1 {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  align-items: flex-end;
+  align-items: center;
 }
 
 .poplist {
@@ -917,24 +932,23 @@ h1 {
 }
 
 .collezione {
-  margin-bottom: 25px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
   width: 100%;
+  margin-bottom: 25px;
 }
 
 .ac {
-  height: 111px;
   width: 100%;
   margin-bottom: -1%;
 }
 
 .ac img {
   cursor: pointer;
-  width: 100%;
-  height: 100%;
+  width: 230px;
+  height: 100px;
   border-radius: 3px;
   margin-left: -2px;
 }
@@ -992,6 +1006,19 @@ h1 {
   gap: 0.3rem;
   width: 85%;
   height: 100%;
+}
+
+@media (max-width: 1200px) {
+  .reviews {
+    flex-direction: column;
+    align-items: center;
+  }
+  .poplist {
+    width: auto;
+  }
+  .popreviews {
+    width: max-content;
+  }
 }
 
 .popreviews h2 {
@@ -1276,16 +1303,6 @@ footer {
   letter-spacing: 0;
 }
 
-@media (max-width: 770px) {
-  .reviews {
-    flex-direction: column;
-    align-items: center;
-  }
-  .colonna2 {
-    width: 60%;
-  }
-}
-
 @media (max-width: 600px) {
   .nascondi_mobile {
     display: none;
@@ -1546,10 +1563,6 @@ footer {
     width: 15px;
   }
 
-  .poplist {
-    width: 100%;
-  }
-
   .lists {
     width: 100%;
   }
@@ -1560,12 +1573,10 @@ footer {
 
   .collezione {
     width: 100%;
-    gap: 5px;
   }
 
   .ac {
     width: 80%;
-    height: 162px;
   }
 
   .collezione h3 {

@@ -12,6 +12,7 @@ const placeholder_img =
 const api_key = "17d4cbc601mshdf748d30e539c36p12f7abjsn768814760e84";
 const client_id_twitch = "12h3bsf6as2gx17rhtrnjjx0bfkr03";
 const client_secret_twitch = "cdpi68gukavd5evpooq9pn3bk31ugg";
+const cross_src = "public/cross.png";
 
 function login(event) {
   event.preventDefault();
@@ -114,12 +115,14 @@ function onTokenJson(json) {
   game_token = json.access_token;
 }
 
-function show_actor(json) {
-  
-}
+function show_actor(json) {}
 
 function show_movie(json) {
   modal_search.innerHTML = "";
+  const cross = document.createElement("img");
+  cross.src = cross_src;
+  cross.classList.add("cross");
+  modal_search.appendChild(cross);
   const film = json;
   const movie_div = document.createElement("div");
   movie_div.classList.add("modal_game");
@@ -238,6 +241,10 @@ function show_movie_info(event) {
 
 function show_game(json) {
   modal_search.innerHTML = "";
+  const cross = document.createElement("img");
+  cross.src = cross_src;
+  cross.classList.add("cross");
+  modal_search.appendChild(cross);
   for (item of json) {
     const game = item;
     const game_div = document.createElement("div");
@@ -389,7 +396,11 @@ function onJson_Imdb(json) {
       movie_list.appendChild(poster_url);
       movie_list.addEventListener("click", stopProp);
       if (movie_id.includes("tt")) {
-        movie_list.addEventListener("click", show_movie_info);
+        if (item.qid == "videoGame") {
+          movie_list.addEventListener("click", show_game_info);
+        } else {
+          movie_list.addEventListener("click", show_movie_info);
+        }
       } else if (movie_id.includes("nm")) {
         movie_list.addEventListener("click", show_nm_info);
       }
