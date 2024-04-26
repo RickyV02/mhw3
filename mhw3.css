@@ -296,8 +296,8 @@ nav input[type="text"] {
 .cover {
   border-radius: 5px;
   border: solid 2px black;
-  max-height: 374px;
-  max-width: 264px;
+  max-height: 320px;
+  max-width: 260px;
 }
 
 .credits {
