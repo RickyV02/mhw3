@@ -103,8 +103,6 @@ function showmore(event) {
   item.classList.add("nocursor");
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-
 let game_name;
 let game_token;
 let retry = false;
@@ -474,8 +472,6 @@ async function show_game_info(event) {
     show_game_info();
   }
 }
-
-////////////////
 
 function onJson_Imdb(json) {
   if (!json) return null;
